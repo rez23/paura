@@ -2,16 +2,16 @@
 
 Pacman Aur Automatization
 
-<h5><strong>Features</strong></h5>
+<h4><strong>Features</strong></h5>
 
-<strong>Recursive packages installation</strong>  
+<h7><strong>Recursive packages installation</strong> </h7> 
 <code>paura -S package1 package2 package3</code>
 
-<strong>Recursive installation and downloads of aur deps for packages</strong>
+<h7><strong>automatic recursive installation of aur dependencies</strong><h7>
 
-<strong>Automatic manage and clean cache directory</strong>
+<h7><strong>manage and clean cache directory</strong></h7>
 
-<h3><strong>INSTALL</h3></strong>
+<h3><strong>INSTALL</strong></h3>
 If you want try paura,
 simply clone the repository
 
@@ -23,9 +23,7 @@ simply clone the repository
 
 <code>makepkg si</code>
 
-<strong>NB</strong>
-
-Paura is based on auracle, so you need to have it alredy installed on your computer
+Paura is based on auracle: https://github.com/falconindy/auracle
 
 <h4><strong>Manually Install</strong></h4>
 
