@@ -15,10 +15,14 @@
 # You should have received a copy of the GNU General Public License    #
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.#
 ########################################################################
-source  "/usr/share/makepkg/*.sh"
+source  /usr/share/makepkg/*.sh
 ###
 # Function
 ##
+msg3(){
+	local mesg=$1; shift
+  printf "${GREEN}::${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
+}
 helpfunct(){
   echo "Usage: "
 	echo "paura [Option[suboption]] <package1> <package2>"

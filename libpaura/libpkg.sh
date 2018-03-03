@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License    #
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.#
 ########################################################################
-source  "/usr/share/makepkg/*.sh"
+source  /usr/share/makepkg/*.sh
 ####
 # Array
 ###
@@ -49,6 +49,7 @@ testpkg(){
 }
 
 install_pkg(){
+	set -x
 	install_list=(${aurpackage[*]}
 								${autdate_pkg[*]})
 	while [[ -n ${install_list[${o}]} ]]; do
@@ -79,6 +80,7 @@ install_pkg(){
 		unset all_depends
 	done
 	unset o n 
+	set +x
 }
 
 upgrade_pkg(){

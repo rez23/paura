@@ -13,13 +13,22 @@
 #                                                                      #
 # You should have received a copy of the GNU General Public License    #
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.#
-BAR="#"
-source /usr/share/makepkg/*.sh
+source  /usr/share/makepkg/*.sh
+pkg_search(){
+	case ${OPTARG} in 
+		"s" | "search")
+			pacman -Ss ${package}
+			auracle search ${package}
+			;;
+		"sq" )
+				msg "Core packages"
+				pacman -Ssq ${package}
+				msg "Aur packages"
+				auracle search --quiet ${package}
+			;;
+		esac
+}
 get_pkg(){
-	if [[ -n ${corepackage} ]]; then
-	msg "Downloading and installing core packages" 
-	sudo pacman -S ${corepackage}
-	fi
 	if [[ -n ${aurpackage} ]]||[[ -n ${outdate_pkg} ]]; then
 		VERSION=`auracle info ${aurpackage[$x]} | grep -oP '(?=Version).*'`
 		msg "Looking in aur" 

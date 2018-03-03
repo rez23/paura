@@ -37,17 +37,16 @@ tmpDir="${XDG_RUNTIME_DIR:-/tmp}"
 [[ ! -e $usercacheDir ]] && mkdir -p $usercacheDir
 # base var 
 pacmanbin="${PACMAN:-pacman}"
-clonedir="${AURDEST:-$usercacheDir}/package"
+clonedir="${AURDEST:-$usercacheDir}/packages"
 [[ ! -e $clonedir ]] && mkdir $clonedir
 ###
 ###
 #####
 # Lib
-source	\
-	"${LibDir}/libaur.sh" \
-	"${LibDir}/libpkg.sh" \
-	"${LibDir}/libutils.sh" \
- "/usr/share/makepkg/*.sh"
+source	${LibDir}/libaur.sh 
+source	${LibDir}/libpkg.sh 
+source	${LibDir}/libutils.sh 
+source  /usr/share/makepkg/*.sh
 
 ###
 # Function
@@ -64,27 +63,26 @@ not_implemented_yet(){
 	echo "If you wont help visit:${github}"
 	}
 SyncPaura(){
+	testpkg
 	echo "*********************"
 	echo "**      pAURa     ****"
 	echo "*********************"
 	case ${OPTARG} in
 		y | *y* | *y | y* )
-			msg "Searching packages..."
 			sudo pacman -S${OPTARG} 
-			[ -z ${package} ] && exit 0
+			[[ -z ${package} ]] && exit 0
 			if_close_exit
 			;;
 		u | *u | u*)
-			msg "Start system upgrade"
 			sudo pacman -S${OPTARG}
 			sysupgrade=1
 			if_close_exit
 			;;
 		*) 
-			msg "Searching packages..."
+			msg3 "Searching packages..."
 			if_close_exit
+			[[ -n ${corepackage} ]] && msg "Getting core message" && pacman -S ${corepackage}
 		esac
-	testpkg
 	if [[ -n ${notfoundpkg} ]]; then
 			error "cant find ${notfoundpkg}"
 			exit 1
@@ -134,7 +132,7 @@ sleep 1
 					;;
 				upgrade)
 					msg "Start system upgrade"
-					sudo pacman -Su
+					sudo pacman -Su ${package}
 					sysupgrade=1
 					testpkg
 					get_pkg
@@ -179,9 +177,6 @@ sleep 1
 			;;
 		'h') 
 			helpfunct
-			;;
-		"u" )
-			upgrade_pkg
 			;;
 		?)
 			echo "${OPTARG} isn't a supported option"
