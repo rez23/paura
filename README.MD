@@ -23,9 +23,7 @@ simply clone the repository
 
 <code>makepkg si</code>
 
-<strong>NB</strong>
-
-Paura is based on auracle, so you need to have it alredy installed on your computer
+Paura is based on auracle: https://github.com/falconindy/auracle
 
 <h4><strong>Manually Install</strong></h4>
 
