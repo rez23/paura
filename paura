@@ -1,0 +1,194 @@
+#!/bin/sh
+# Copyright (c) 2018 Spartaco Amadei <spamadei@gmail.com>
+
+# This program is free software: you can redistribute it and/or modify #
+# it under the terms of the GNU General Public License as published by #
+# the Free Software Foundation, either version 3 of the License, or    #
+# (at your option) any later version.                                  #
+#                                                                      #
+# This program is distributed in the hope that it will be useful,      # 
+# but WITHOUT ANY WARRANTY; without even the implied warranty of       #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        #
+# GNU General Public License for more details.                         #
+#                                                                      #
+# You should have received a copy of the GNU General Public License    #
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.#
+
+
+
+#
+# pAURa, pacman AUR automatization: The new AUR helper that minimizes user interaction
+#
+LibDir='/usr/lib/paura'
+Author="rez23"														              
+version="alpha1" 
+github="https://github.com/rez23/paura.git"
+############################################################################
+################################################################# CONFIG ####
+############################################################################
+# Determine config location
+configDir="${XDG_CONFIG_DIRS:-/etc/xdg}/paura"
+userconfigDir="${XDG_CONFIG_HOME:-${HOME}/.config}/paura" #in the next I make the ability to configure custom config file
+userpacmanDir="${XDG_CONFIG_HOME:-${HOME}/.config}/pacman"
+usercacheDir="${XDG_CACHE_HOME:-${HOME}/.cache}/paura"
+tmpDir="${XDG_RUNTIME_DIR:-/tmp}"
+# Initialize paura folder hiteracy
+[[ ! -e $userconfigDir ]] && mkdir -p $userconfigDir
+[[ ! -e $usercacheDir ]] && mkdir -p $usercacheDir
+# base var 
+pacmanbin="${PACMAN:-pacman}"
+clonedir="${AURDEST:-$usercacheDir}/package"
+[[ ! -e $clonedir ]] && mkdir $clonedir
+###
+###
+#####
+# Lib
+source	\
+	"${LibDir}/libaur.sh" \
+	"${LibDir}/libpkg.sh" \
+	"${LibDir}/libutils.sh" \
+ "/usr/share/makepkg/*.sh"
+
+###
+# Function
+###
+if_close_exit(){
+if [[ $? != 0 ]]; then
+	error "Interrupt signal from user. Aborting..."
+	exit 1
+fi
+}
+not_implemented_yet(){
+	error "Sorry, this function isn ultimated yet..."
+	echo "This program is in alpha stage, read the paura(1) man page for info..."
+	echo "If you wont help visit:${github}"
+	}
+SyncPaura(){
+	echo "*********************"
+	echo "**      pAURa     ****"
+	echo "*********************"
+	case ${OPTARG} in
+		y | *y* | *y | y* )
+			msg "Searching packages..."
+			sudo pacman -S${OPTARG} 
+			[ -z ${package} ] && exit 0
+			if_close_exit
+			;;
+		u | *u | u*)
+			msg "Start system upgrade"
+			sudo pacman -S${OPTARG}
+			sysupgrade=1
+			if_close_exit
+			;;
+		*) 
+			msg "Searching packages..."
+			if_close_exit
+		esac
+	testpkg
+	if [[ -n ${notfoundpkg} ]]; then
+			error "cant find ${notfoundpkg}"
+			exit 1
+	fi
+	get_pkg
+	process_pkg
+}
+# OPTION
+
+# Main
+colorize
+#echo "************************"
+#msg "Starting pAURa... **"
+#echo "************************"
+sleep 1
+# # # # # #
+# Option  
+# # # # # 
+	longopt=$1
+	while getopts ":S:R:Q:hvsq-:" opt; do
+	shift 1
+	declare -a package
+	package=($*)
+	case ${opt} in 
+	# Longoptions
+		-)												
+			case ${OPTARG} in 
+				help)
+					helpfunct
+					;;
+				version)
+					paurainfo
+					;;
+				search)
+					pkg_search
+					;;
+				testfunction)
+					testpkg
+					echo "core ${corepackage[*]}"
+	        echo "aur ${aurpackage[*]}"
+					;;
+				a-christmas-song)
+					christmas_song
+					;;
+				downloadonly)
+					not_implemented_yet
+					;;
+				upgrade)
+					msg "Start system upgrade"
+					sudo pacman -Su
+					sysupgrade=1
+					testpkg
+					get_pkg
+					process_pkg
+					;;
+				sync)
+					msg "Searching packages..."
+					sudo pacman -Syy
+					testpkg package
+					get_pkg
+					process_pkg
+					;;
+				cleancache)
+				verboseCacheclean
+					;;	
+				*)
+					echo "--${OPTARG} isn't a supported option"
+			    echo "Usage: "
+					echo "paura [option] <package> <package>"
+					echo "use -h | --help for a list of option"
+					;;
+				esac
+			;;
+		"S" )
+			case ${OPTARG} in
+				"s" | "sq" )
+				pkg_search
+				;;
+				"c")
+					cleanCahe			
+					;;
+				* )
+					SyncPaura
+					;;
+			esac
+		;;
+		"R")
+			sudo pacman -$opt $package
+			;;
+		"v")
+			paurainfo
+			;;
+		'h') 
+			helpfunct
+			;;
+		"u" )
+			upgrade_pkg
+			;;
+		?)
+			echo "${OPTARG} isn't a supported option"
+			echo "Usage: "
+			echo "paura [option] <package> <package>"
+			echo "use -h | --help for a list of option"
+			;;
+	esac
+done
+			

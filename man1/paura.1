@@ -1,0 +1,75 @@
+.\" Manpage for paura.
+.\" Contact apamadei@gmail.com.in to correct errors or typos.
+.TH paura 1 "2-03-2018" "1.0" "paura man page"
+.SH NAME
+P.AUR.A \- Pacman AUR Automatizer.	version alpha1
+.SH SYNOPSIS
+paura [option[suboption]] <package1> <package2> <..>
+.SH DESCRIPTION
+paura is the new pacman AUR automatizer, based on auracle, that minimize the user interact.
+.SH OPTIONS
+.B \-S
+.RS
+work with packages (install, search, upgrade ecc)
+.RE
+
+.B \-R
+.RS
+Remove a package.
+.RE
+
+.B \-Q
+.RS
+See information of an installed packages
+.RE
+
+.B \-h
+.RS
+Print some help information about the command and its usage
+.RE
+
+.B \-v
+.RS
+Print detailed information about the program version and description
+.RE
+
+.SH SUBOPTIONS
+.BR \-S\ Suboptions
+.RS
+.B \-s\ search package booth core repo and aur
+
+.B \-sq\ search in "not verbose mode"
+
+.B \-u\ upgrade the installed package
+
+.B \-y\ upgrade packagelist
+
+.B \-c\  Clean cache dir
+
+.RE
+.BR \-R\ Subotion
+.RS
+See pacman(1) for detail
+.RE
+
+.SH OTHER OPTIOIN
+.RE
+.B \--search\ search package
+
+.B \--upgrade\ start a full system upgrade (like -Syu option)
+
+.B \--sync\	Install a package and refresh the pkg list (like 'Sy')
+
+.B \--version\	Print detailed information about the version of paura
+
+.B \--cleancache\ A more verbose cache clean.
+
+.B \--help\ rint an help message
+
+.B \--????\	??????????????????????????? 
+.SH SEE ALSO
+pacman(1), auracle(5) 
+.SH BUGS
+For bug's report write to spamadei@gmail.com
+.SH AUTHOR
+<rez23> <Spartaco Amadei> (spamadei@gmail.com)

@@ -1,0 +1,18 @@
+# Maintainer: Spartaco Amadei <spamadei@gmail.com>
+pkgname=paura-git
+pkgver=alpha1
+pkgrel=1
+pkgdesc='helper tools for the arch user repository'
+url='https://github.com/rez23/paura'
+arch=('any')
+license=('custom:ISC')
+source=('git+https://github.com/rez23/paura')
+sha256sums=('SKIP')
+conflicts=()
+provides=('paura')
+depends=('pacman>=5.0' 'git' 'auracle')
+makedepends=('git')
+package() {
+    cd paura
+    make DESTDIR="$pkgdir" install
+}
