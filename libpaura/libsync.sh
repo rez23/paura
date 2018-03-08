@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License    #
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.#
 ########################################################################
-source  /usr/share/makepkg/*.sh
+source  /usr/share/makepkg/util/message.sh
 ####
 # Array
 ###
@@ -30,7 +30,7 @@ declare -a all_depends
 ###
 # Function
 ##
-testpkg(){
+test_pkg(){
 	while [[ -n ${package[$n]} ]]; do
 		if (pacman -Si ${package[$n]} &>/dev/null); then
 			corepackage[$a]=${package[$n]}
@@ -48,11 +48,65 @@ testpkg(){
 	unset n a b c
 }
 
+get_pkg(){
+	if [[ -n ${aurpackage} ]]||[[ -n ${outdate_pkg} ]]; then
+		VERSION=`auracle info ${aurpackage[$x]} | grep -oP '(?=Version).*'`
+		msg3 "Looking in aur" 
+		msg2 "The next package will be installed from aur:"
+		while [[ -n ${aurpackage[$x]} ]]; do
+			printf "${aurpackage[$x]}" 
+			printf "                          $VERSION\n"
+			x=$((++x)) 
+		done
+		if [[ -n ${outdate_pkg} ]]; then
+			msg2 "The next package will be upgrade from aur"
+			auracle sync
+		fi
+		printf "Continue? [Y/n]:"
+		read reponse
+		if [[ $reponse == "y" ]]||[[ ${reponse} == '' ]]; then
+			cd ${clonedir}
+			msg "Downloading package:"
+			while [[ -n ${aurpackage[$p]} ]]; do
+				printf "${aurpackage[$p]}"
+				while true;do 
+				echo -n "."
+				sleep 1
+				done &
+				auracle download -r ${aurpackage[$p]}  &>/dev/null
+				kill $!; trap 'kill $!' SIGTERM
+				printf "                                                    Done!"
+				echo
+				p=$((++p))
+			done
+			while [[ -n ${outdate_pkg[$p1]} ]]; do
+				while true; do
+					printf "${outdate_pkg[$p1]}"
+					while true; do
+					echo -n "."
+					sleep 1
+					done &
+					auracle download -r ${outdate_pkg[$p1]} &>/dev/null
+					kill $!; trap 'kill $!' SIGTERM
+				printf "                                                    Done!"
+				echo
+				done
+				x1=$((++p1))
+			done
+		else 
+				exit 0
+		fi
+	fi
+}
+
 install_pkg(){
-	set -x
-	install_list=(${aurpackage[*]}
-								${autdate_pkg[*]})
+	install_list=( ${aurpackage[*]}
+                   ${autdate_pkg[*]} )
 	while [[ -n ${install_list[${o}]} ]]; do
+		printf "${install_list[$o]} is going to be installed\n"
+		printf "Do you want see the PKGBUILD frist? [Y/n]:"
+		read editpkg
+		[[ ${editpkg} == "y" ]]||[[ ${editpkg} == "" ]] && pkgbuildedit ${clonedir}/PKGBUILD
 		source ${clonedir}/${install_list[${o}]}/PKGBUILD
 		all_depends=(${depends[*]}
 								${makedepends[*]})
@@ -67,7 +121,7 @@ install_pkg(){
 					n=$((++n))
 				done
 			fi
-		msg "Starting ${install_list[$o]} installation"
+		msg "Installing ${install_list[$o]}:"
 		if [[ -d ${clonedir}/${install_list[$o]} ]]; then
 			cd ${clonedir}/${install_list[$o]}
 		else
@@ -80,10 +134,10 @@ install_pkg(){
 		unset all_depends
 	done
 	unset o n 
-	set +x
 }
 
 upgrade_pkg(){
  pacman -Su ${corepackage}
  echo $install_list
 }
+

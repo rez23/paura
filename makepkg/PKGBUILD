@@ -9,7 +9,7 @@ license=('custom:ISC')
 source=('git+https://github.com/rez23/paura')
 sha256sums=('SKIP')
 conflicts=()
-provides=('paura')
+replace=('paura<alpha1.2')
 depends=('pacman>=5.0' 'git' 'auracle')
 makedepends=('git')
 package() {

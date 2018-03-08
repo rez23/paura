@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License    #
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.#
 ########################################################################
-source  /usr/share/makepkg/*.sh
+source  /usr/share/makepkg/util/message.sh
 ###
 # Function
 ##
@@ -103,4 +103,8 @@ ifwrong(){
 	error "Something went wrong"
 	echo "no package will be installed"
 	exit 1
+}
+
+pkgbuildedit(){
+    ${VISUAL:-${EDITOR:-vi}} $1
 }
