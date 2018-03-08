@@ -11,6 +11,8 @@ Pacman Aur Automatization
 
 <h7><strong>manage and clean cache directory</strong></h7>
 
+and other, see paura(1) man page for more info.
+
 <h3><strong>INSTALL</strong></h3>
 If you want try paura,
 simply clone the repository
