@@ -19,11 +19,11 @@ source  /usr/share/makepkg/util/message.sh
 ###
 pkg_search(){
 	case ${OPTARG} in
-		"s" | "search")
+		"s" )
 			pacman -Ss ${package}
 			auracle search ${package}
 			;;
-		"sq" )
+		"sq" | "search")
 				msg "Core packages"
 				pacman -Ssq ${package}
 				msg "Aur packages"

@@ -119,26 +119,7 @@ sleep 1
 					paurainfo
 					;;
 				search)
-					while getopts "M:V:N:R:D:" soartopt; do
-						case ${soartopt} in
-							M)
-								sortorder=1
-								;;
-							V)
-								sortorder=2
-								;;
-							N)
-								sortorder=3
-								;;
-							R)
-								sortorder=4
-								;;
-							D)
-								sortorder=5
-								;;
-							esac
 					pkg_search
-					done
 					;;
 				testfunction)
 					test_pkg
