@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 ########################################################################
 # Copyright (c) 2018 Spartaco Amadei <spamadei@gmail.com>              #
 #																																			 #
