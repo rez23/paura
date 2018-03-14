@@ -17,7 +17,7 @@ and other, see paura(1) man page for more info.
 If you want try paura,
 simply clone the repository
 
-<code>git clone https://github.com/rez23/PAURA.git</code>
+<code>git clone https://github.com/rez23/paura.git</code>
 
 <code>cd paura</code>
 
