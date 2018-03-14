@@ -58,21 +58,23 @@ not_implemented_yet(){
 	echo "If you wont help visit:${github}"
 	}
 SyncPaura(){
-	test_pkg
 	echo "*********************"
 	echo "**      pAURa     ****"
 	echo "*********************"
 	case ${OPTARG} in
 		y | *y | y* )
+			test_pkg
 			[[ ${OPTARG} != ${package[0]} ]] && sudo pacman -S${OPTARG} ${corepackage}
 			[[ -z ${package} ]] && msg "Done!" && exit 0
 			;;
 		u | *u | u*)
-		[[ ${OPTARG} != ${package[0]} ]] && sudo pacman -S${OPTARG} ${corepackage}
+			test_pkg
+			[[ ${OPTARG} != ${package[0]} ]] && sudo pacman -S${OPTARG} ${corepackage}
 			sysupgrade=1
 			;;
 		${package[0]}) 
 			msg3 "Searching packages..."
+			test_pkg
 			[[ -n ${corepackage} ]] && sudo pacman -S ${corepackage}
 			;;
 		*)

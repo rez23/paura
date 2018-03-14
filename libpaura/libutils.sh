@@ -23,6 +23,11 @@ msg3(){
 	local mesg=$1; shift
   printf "${GREEN}::${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
 }
+
+pkgmsg(){
+	local mesg=$1; shift
+  printf "${GREEN}>${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
+}
 helpfunct(){
   echo "Usage: "
 	echo "paura [Option[suboption]] <package1> <package2>"
