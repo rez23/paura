@@ -23,7 +23,7 @@ LIBDIR ?= $(PREFIX)/lib
 .PHONY: install
 install:
 	@install -Dm755 paura     -t $(DESTDIR)$(BINDIR)
-	@install -Dm755 libpaura/*   -t $(DESTDIR)$(LIBDIR)/$(LIBDIR)
+	@install -Dm755 libpaura/*   -t $(DESTDIR)$(LIBDIR)/$(LIB)
 	@install -Dm644 man1/*  -t $(DESTDIR)$(SHRDIR)/man/man1
 	@install -Dm644 COPYNG -t $(DESTDIR)$(SHRDIR)/licenses/$(PROGNM)
 
