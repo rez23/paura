@@ -10,7 +10,7 @@ I needed an helper that should can search and downloads aur's packages and, as t
 same time, be able to auto compile and install packages. This was the 
 porpouse with I have started the development of paura, to manage aur's packages minimizing as 
 much as possible the user interacts. Since I needed to automatize some archlinux 
-native operation, I preferred to write paura directly in bash, instead other 
+native operation, I preferred to write paura directly in bash, instead that in other 
 languages,so to operate directly from system default shell.
 
 Initially I don't had counted to pubblish paura,my initial idea was that of make an helper manage only my aur packages, however, with the passage of the time, the 
