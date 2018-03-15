@@ -4,72 +4,99 @@
 .SH NAME
 P.AUR.A \- Pacman AUR Automatization.	version alpha1
 .SH SYNOPSIS
-paura [option[suboption]] <package1> <package2> <..>
+paura [operation][option] <package1> <package2> <..>
 .SH DESCRIPTION
-paura is the new pacman AUR automatizer, based on auracle, that minimize the user interact.
-.SH OPTIONS
-.B \-S
+paura is an helper that intended minimize as much as possible the user interact for download compile and install AUR packages. It is based on auracle(1) and pacman(1) and it is able to manage the packages both from aur that from core repository. Paura can install packages from aur and core repo, maintain updated the installed aur packages, search aur packages, automatic recursive resolution of the aur dependencies during aur packages installation. 
+.SH OPERATION
+.B \-S : Sync
 .RS
-work with packages (install, search, upgrade ecc)
+.B paura [-S] <package1> <package2> <...>
+.B : Sync the package list and make possible operate with packages, for instal search ecc
 .RE
 
-.B \-R
+.B \-R : Remove 
 .RS
-Remove a package.
+.B paura [-R] <package1> <package2> <...>
+.B : Remove an installed packages packages with pacman.
+See pacman(1) for info.
 .RE
 
-.B \-Q
+.B \-Q : Query
 .RS
-See information of an installed packages
+.B paura [-Q] package
+.B : See installed packages with pacman, see pacman(1) man page for more info.
 .RE
 
-.B \-h
+.B \-U : Upgrade
+.RS
+.B paura [-U] <package.pkg.tar.xz>|<path/to/aur/sources>
+.B : Install packages from file or from source if is an aur repository
+.RE
+
+.B \-h : Help
 .RS
 Print some help information about the command and its usage
 .RE
 
-.B \-v
+.B \-v : Version
 .RS
 Print detailed information about the program version and description
 .RE
 
-.SH SUBOPTIONS
-.BR \-S\ Suboptions
+.SH Option
+.BR Sync \ Option:\ 
 .RS
-.B \-s\ search package booth core repo and aur
+.B s\ :\ search package booth core repo and aur
 
-.B \-sq\ search in "not verbose mode"
+.B sq\ :\ search in quiet mode 
 
-.B \-u\ upgrade the installed package
+.B i\ :\ get info about package
 
-.B \-y\ upgrade packagelist
+.B u\ :\ upgrade the installed package
 
-.B \-c\  Clean cache dir
+.B y\ :\ upgrade packagelist
 
+.B c\  :\ Clean cache dir
 .RE
-.BR \-R\ Subotion
+.SH Remove \ Options:\
 .RS
+.B Same of pacman, see pacman(1) man page for more info
+.RE
+.SH Query \ Options:\
+.RS
+.B Same of pacman, see pacman(1) man page for more info.
+.RE
 See pacman(1) for detail
 .RE
 
-.SH OTHER OPTIOIN
+.SH LONG OPTIONS
 .RE
-.B \--search\ search package
+.B --search\ :\ search packages (add -q after for searching packages in quiet mode)
 
-.B \--upgrade\ start a full system upgrade (like -Syu option)
+.B --upgrade\ :\ start a full system upgrade (like -Syu option)
 
-.B \--sync\	Install a package and refresh the pkg list (like 'Sy')
+.B --sync\ :\ Install a package and refresh the pkg list (like 'Sy')
 
-.B \--version\	Print detailed information about the version of paura
+.B --version\ :\ Print detailed information about the version of paura
 
-.B \--cleancache\ A more verbose cache clean.
+.B --cleancache\ :\ A more verbose cache clean.
 
-.B \--help\ rint an help message
+.B --help\ :\ rint an help message
 
-.B \--????\	??????????????????????????? 
+.B --downloadonly\ :\ Only download from aour without processing PKGBUILD, use -l for download the packages repo in the actual foolder instead of paura cache directory.
+.RS
+.B paura --download-only -l <package1> package2> <...>
+.RE
+
+.B --install\ :\ Only install a packages, if it was alredy downloaded before, use i option for install a packages that aren't present in paura cache dirs
+.RS
+.B paura --install [-p] <path-of-aur-package>
+.RE
+.RE
+
 .SH SEE ALSO
 pacman(1), auracle(5) 
 .SH BUGS
 For bug's report write to spamadei@gmail.com
 .SH AUTHOR
-<rez23> <Spartaco Amadei> (spamadei@gmail.com)
+rez23 <spamadei@gmail.com>

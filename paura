@@ -64,18 +64,18 @@ SyncPaura(){
 	case ${OPTARG} in
 		y | *y | y* )
 			test_pkg
-			[[ ${OPTARG} != ${package[0]} ]] && sudo pacman -S${OPTARG} ${corepackage}
+			[[ ${OPTARG} != ${package[0]} ]] && sudo pacman -S${OPTARG} ${corepackage[*]}
 			[[ -z ${package} ]] && msg "Done!" && exit 0
 			;;
 		u | *u | u*)
 			test_pkg
-			[[ ${OPTARG} != ${package[0]} ]] && sudo pacman -S${OPTARG} ${corepackage}
+			[[ ${OPTARG} != ${package[0]} ]] && sudo pacman -S${OPTARG} ${corepackage[*]}
 			sysupgrade=1
 			;;
 		${package[0]}) 
 			msg3 "Searching packages..."
 			test_pkg
-			[[ -n ${corepackage} ]] && sudo pacman -S ${corepackage}
+			[[ -n ${corepackage} ]] && sudo pacman -S ${corepackage[*]}
 			;;
 		*)
 					echo "$OPTARG isn't supported option"
@@ -83,7 +83,7 @@ SyncPaura(){
 				;;
 		esac
 	if [[ -n ${notfoundpkg} ]]; then
-			error "cant find ${notfoundpkg}"
+			error "cant find ${notfoundpkg[*]}"
 			exit 1
 	fi
 	get_pkg
@@ -94,6 +94,22 @@ SyncPaura(){
 			error "An error as occured no packages will be installed" 
 			exit 1
 		fi
+}
+localpackage(){
+	cd ${OPTARG}
+	all_depends=(`cat .SRCINFO|  awk '{if(/depends/) print $3}'`
+							`cat .SRCINFO|  awk '{if(/makedepends/) print $3}'`)
+	while [[ -n ${all_depends[$i]} ]]; do
+		if [[ -e ${clonedir}/${all_depends[$i]} ]]; then
+			cd ${clonedir}/${all_depends[$i]}
+			makepkg -si
+		fi
+		i=$((++i))
+	done
+	pkgbase=`cat .SRCINFO | awk '{if(/pkgbase/) print $3}'`
+	echo "Installing ${pkgbase}"
+	makepkg -si
+	unset i
 }
 # OPTION
 
@@ -106,7 +122,7 @@ sleep 1
 # # # # # #
 # Option  
 # # # # # 
-	while getopts ":S:R:Q:hvsq-:" opt; do
+	while getopts ":S:R:Q:U:hvsq-:" opt; do
 	shift 1
 	declare -a package
 	package=($*)
@@ -121,6 +137,12 @@ sleep 1
 					paurainfo
 					;;
 				search)
+					shift 
+					if [[ $1 == "-q" ]]; then
+						shift 1 
+						package=$1
+						$OPTARG="sq"
+					fi
 					pkg_search
 					;;
 				testfunction)
@@ -132,22 +154,59 @@ sleep 1
 					christmas_song
 					;;
 				downloadonly)
-					not_implemented_yet
+					echo "*********************"
+					echo "**      pAURa     ****"
+					echo "*********************"
+					msg3 "Download only mode"
+					test_pkg
+					if [[ -n ${corepackage} ]]; then
+						error "download only mode can be used only with aur packages"
+						echo "run pacman or paura in sync mode (-S) for install core packages"
+						exit 1
+					fi
+					if [[ $1 == -l ]]; then
+						auracle download ${aurpackage[*]}
+					else
+						get_pkg
+					fi
+					;;
+				install)
+					echo "*********************"
+					echo "**      pAURa     ****"
+					echo "*********************"
+					msg3 "Installing mode"
+					while getopts "p:" installopt; do
+						case ${installopt} in
+							p)
+								localpackage
+								exit 0
+								;;
+							?)
+								echo "passed unsopported option"
+								echo "for install specific aur package use -p <path> "
+								;;
+							esac
+						done
+							install_pkg
+							if [[ $? != 0 ]]; then
+								error "No packages found..."
+								exit 1
+							fi
 					;;
 				upgrade)
-					msg "Start system upgrade"
-					sudo pacman -Su ${package}
 					sysupgrade=1
+					msg3 "Start system upgrade"
 					test_pkg
+					sudo pacman -Syyu ${corepackage[*]}
 					get_pkg
-					process_pkg
+					install_pkg
 					;;
 				sync)
-					msg "Searching packages..."
-					sudo pacman -Syy
-					test_pkg 
+					msg3 "Searching packages..."
+					test_pkg
+					sudo pacman -Syy ${corepackage[*]}
 					get_pkg
-					process_pkg
+					install_pkg
 					;;
 				cleancache)
 				verboseCacheclean
@@ -161,6 +220,11 @@ sleep 1
 				esac
 			;;
 		"S" )
+			if [[ -z ${package} ]]; then
+				echo "S operation need argument"
+				echo "use --help or see man page for more info"
+				exit 1
+			fi
 			case ${OPTARG} in
 				"s" | "sq" )
 				pkg_search
@@ -168,6 +232,11 @@ sleep 1
 				"c")
 					cleanCahe			
 					;;
+				"i")
+					test_pkg
+					[[ -n ${corepackage} ]] && pacman -Si ${corepackage}
+					[[ -n ${aurpackage} ]] && auracle info ${aurpackage}
+				;;
 				* )
 					SyncPaura
 				;;
@@ -183,11 +252,26 @@ sleep 1
 		'h') 
 			helpfunct
 			;;
+		"U")
+			echo "*********************"
+			echo "**      pAURa     ****"
+			echo "*********************"
+			msg3 "Installing mode"
+			if [[ ${OPTARG} == *.pkg.tar.xz ]]; then
+				pacman -U ${OPTARG}
+			else
+				localpackage
+			fi
+			;;
 		?)
 			echo "${OPTARG} isn't a supported option"
 			echo "Usage: "
 			echo "paura [option] <package> <package>"
 			echo "use -h | --help for a list of option"
+			;;
+		:)
+			echo "${OPTARG} required an arguments!"
+			echo "use --help or se paura(1) man page for more info"
 			;;
 	esac
 done
