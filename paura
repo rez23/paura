@@ -220,11 +220,6 @@ sleep 1
 				esac
 			;;
 		"S" )
-			if [[ -z ${package} ]]; then
-				echo "S operation need argument"
-				echo "use --help or see man page for more info"
-				exit 1
-			fi
 			case ${OPTARG} in
 				"s" | "sq" )
 				pkg_search
