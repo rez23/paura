@@ -3,18 +3,20 @@
 
 paura is a pacman aur automatizer, based on auracle, that try to minimize as much as 
 possible the user interact.
-I have started this progect because pacaur went out of mantains.
-I needed an helper that should be search and downloads aur's packages and as the 
-same time should be able to automatics compile and install packages. This was the 
-poprpuse with I have started to develop paura, process aur's packages minimizing as 
+
+I have started this progect when pacaur was out of mantaining.
+
+I needed an helper that should can search and downloads aur's packages and, as the 
+same time, be able to auto compile and install packages. This was the 
+porpouse with I have started the development of paura, to manage aur's packages minimizing as 
 much as possible the user interacts. Since I needed to automatize some archlinux 
-native operation, I have preferred write paura directly in bash instead other 
-languages as call relative function directly from system defaults shell.
-Initially I don't had counted to pubblish paura, because I hse started its 
-development with the idea of make an helper only for sotisfy my need of ave an 
-helper for manage my aur packages, however, with the passage of the time, the 
+native operation, I preferred to write paura directly in bash, instead other 
+languages,so to operate directly from system default shell.
+
+Initially I don't had counted to pubblish paura,my initial idea was that of make an helper manage only my aur packages, however, with the passage of the time, the 
 project became ever more mature and complete and finally, after some request from 
-the few peoples to whom I had given paura, I have decide to share it.
+the few people to whom I had given paura, I have decide to share it.
+
 So, ladies and gentleman... here it's for you, P.AUR.A, a pacman AUR automatizer 
 that minimize user interacts and help you to utilize the aur repository.
 
